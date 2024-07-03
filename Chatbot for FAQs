@@ -1,0 +1,35 @@
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+# Sample FAQs
+faqs = {
+    "What is your return policy?": "Our return policy allows for returns within 30 days of purchase.",
+    "How can I track my order?": "You can track your order through our website by entering your order number.",
+    # Add more FAQs as needed
+}
+
+# Preprocess FAQs
+def preprocess_text(text):
+    stop_words = set(stopwords.words('english'))
+    tokens = word_tokenize(text.lower())
+    return [word for word in tokens if word.isalnum() and word not in stop_words]
+
+processed_faqs = {key: preprocess_text(value) for key, value in faqs.items()}
+
+# Function to find the best matching FAQ
+def find_best_match(query):
+    query_words = preprocess_text(query)
+    best_match = None
+    best_score = 0
+    for faq, faq_words in processed_faqs.items():
+        score = len(set(query_words) & set(faq_words))
+        if score > best_score:
+            best_score = score
+            best_match = faq
+    return faqs[best_match] if best_match else "Sorry, I don't have an answer for that."
+
+# Example usage
+user_query = "What is your return policy?"
+response = find_best_match(user_query)
+print(response)
