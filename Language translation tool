@@ -1,0 +1,21 @@
+from google.cloud import translate_v2 as translate
+
+# Initialize the Google Translate client
+def translate_text(text, target_language):
+    try:
+        client = translate.Client()
+        result = client.translate(text, target_language=target_language)
+        return result['translatedText']
+    except Exception as e:
+        print(f"Translation error: {e}")
+        return None
+
+# Example usage
+if __name__ == '__main__':
+    text_to_translate = "Hello, how are you?"
+    target_language = 'fr'  # Translate to French (you can change this)
+
+    translated_text = translate_text(text_to_translate, target_language)
+    if translated_text:
+        print(f"Original: {text_to_translate}")
+        print(f"Translated ({target_language}): {translated_text}")
